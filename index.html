@@ -81,6 +81,7 @@
     .card,.tree-wrap,.upload-card{box-shadow:none;}
   }
   .namelink-preview{position:absolute;z-index:210;display:flex;align-items:center;gap:9px;background:var(--surface-raised);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-md);padding:8px 12px;font-size:.8rem;pointer-events:none;max-width:220px;}
+  .namelink-preview[hidden]{display:none;}
   .namelink-preview .np-avatar{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink-soft);color:var(--surface-raised);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:.72rem;}
   .namelink-preview .np-body{display:flex;flex-direction:column;gap:1px;min-width:0;}
   .namelink-preview .np-body b{color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -164,6 +165,7 @@
   .nav button:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
 
   .rail-section{display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid var(--border-soft);}
+  .rail-section[hidden]{display:none;}
   .search-wrap{position:relative;}
   #personSearch{width:100%;font-family:inherit;font-size:.82rem;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface-raised);color:var(--text);}
   #personSearch:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
@@ -223,6 +225,9 @@
   svg.tree.panning{cursor:grabbing;}
   .zoom-controls{position:absolute;top:14px;right:14px;z-index:5;display:flex;gap:4px;background:var(--surface-raised);padding:4px;border-radius:9px;border:1px solid var(--border);box-shadow:var(--shadow-sm);}
   .path-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;background:color-mix(in srgb, var(--accent) 14%, var(--surface-raised));border:1px solid var(--accent-soft);border-radius:8px;padding:9px 14px;font-size:.82rem;color:var(--text);}
+  .path-banner[hidden]{display:none;}
+  .ap-child-fields{display:flex;flex-direction:column;gap:14px;}
+  .ap-child-fields[hidden]{display:none;}
   .zoom-controls button{all:unset;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:7px;background:var(--surface-raised);color:var(--text-muted);cursor:pointer;font-size:.95rem;font-family:var(--mono);}
   .zoom-controls button:hover{background:var(--border-soft);color:var(--text);}
   .zoom-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
@@ -247,7 +252,6 @@
   .node.deceased .avatar{opacity:.6;}
   .node.deceased .avatar-ring{opacity:.45;}
   .node.deceased .initials{opacity:.75;}
-  .node.path-highlight rect{stroke:var(--accent);stroke-width:2.6;filter:drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 60%, transparent));}
   /* Seven bands, oldest to youngest generation relative to whoever's
      logged in — a fixed palette rather than one derived from the theme, so
      it reads consistently as "generation," not as another tier/status cue. */
@@ -327,6 +331,7 @@
   .shortcuts-list div{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--text-muted);}
   .shortcuts-list kbd{font-family:var(--mono);font-size:.78rem;background:var(--surface-raised);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:2px 7px;color:var(--text);min-width:20px;text-align:center;}
   .tag-filter{display:flex;flex-wrap:wrap;gap:8px;}
+  .tag-filter[hidden]{display:none;}
   .tag-filter button{all:unset;padding:6px 13px;border-radius:20px;border:1px solid var(--border);background:var(--surface-raised);color:var(--text-muted);font-size:.78rem;cursor:pointer;}
   .tag-filter button:hover{border-color:var(--accent);color:var(--text);}
   .tag-filter button.active{background:var(--ink);border-color:var(--ink);color:var(--surface-raised);}
@@ -414,30 +419,15 @@
   .merge-status{font-size:.82rem;color:var(--text-muted);min-height:1.3em;}
   .merge-status.ok{color:var(--sage);}
 
-  /* ---------- story ---------- */
-  .story-head{padding:20px 22px;display:flex;flex-direction:column;gap:10px;}
-  .tier-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:20px;width:fit-content;}
-  .tier-badge.t1{background:color-mix(in srgb, var(--sage) 20%, transparent);color:var(--sage);}
-  .tier-badge.t2{background:color-mix(in srgb, var(--accent) 22%, transparent);color:var(--accent);}
-  .tier-badge.t3{background:color-mix(in srgb, var(--wine) 22%, transparent);color:var(--wine);}
-  .story-summary{font-size:.95rem;line-height:1.65;max-width:62ch;}
-  .story-tags{display:flex;gap:8px;flex-wrap:wrap;font-size:.76rem;color:var(--text-muted);}
-  .story-tags span,.story-tags .namelink{background:var(--border-soft);padding:3px 9px;border-radius:20px;text-decoration:none;}
-  .story-tags .namelink:hover{background:var(--accent-soft);color:#221701;}
-
-  .sources{display:flex;flex-direction:column;gap:10px;}
-  .source{padding:14px 16px;display:flex;gap:14px;align-items:flex-start;}
-  .source .rank{font-family:var(--mono);font-size:.72rem;color:var(--text-faint);padding-top:2px;}
-  .source-body{display:flex;flex-direction:column;gap:4px;flex:1;}
-  .source-body .who{font-weight:600;}
-  .source-body .meta{font-size:.76rem;color:var(--text-muted);font-family:var(--mono);}
-  .source-body .quote{font-size:.86rem;font-style:italic;color:var(--text);line-height:1.5;margin-top:2px;}
-  .conf{font-size:.7rem;padding:2px 8px;border-radius:20px;white-space:nowrap;font-family:var(--mono);}
-  .conf.high{background:color-mix(in srgb, var(--sage) 22%, transparent);color:var(--sage);}
-  .conf.med{background:color-mix(in srgb, var(--accent) 22%, transparent);color:var(--accent);}
-
-  .resolution{padding:14px 16px;border-left:3px solid var(--accent);background:var(--border-soft);border-radius:0 8px 8px 0;font-size:.85rem;line-height:1.6;}
-  .resolution b{color:var(--ink);}
+  /* ---------- stories (profile tab) ---------- */
+  .stories-pane{display:flex;flex-direction:column;gap:12px;}
+  .story-card{padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+  .story-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .story-card-title{font-size:.95rem;font-weight:600;color:var(--ink);margin:0;}
+  .story-card-desc{font-size:.86rem;color:var(--text);line-height:1.55;margin:0;}
+  .story-card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;}
+  .story-card .tags .namelink{font-size:.72rem;background:var(--border-soft);padding:3px 9px;border-radius:20px;text-decoration:none;color:var(--text-muted);}
+  .story-card .tags .namelink:hover{background:var(--accent-soft);color:#221701;}
 
   /* ---------- timeline ---------- */
   .ledger{position:relative;padding-left:28px;display:flex;flex-direction:column;gap:0;}
@@ -458,10 +448,12 @@
   /* ---------- archive ---------- */
   .archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;}
   .photo{overflow:hidden;display:flex;flex-direction:column;}
-  .thumb{height:130px;background:linear-gradient(135deg,var(--ink) 0%,var(--ink-soft) 55%,var(--accent-soft) 130%);position:relative;}
+  .thumb{height:130px;background:linear-gradient(135deg,var(--ink) 0%,var(--ink-soft) 55%,var(--accent-soft) 130%);position:relative;overflow:hidden;}
   .thumb[role="button"]{cursor:pointer;}
   .thumb[role="button"]:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
-  .lightbox-glyph{height:220px;border-radius:10px;background:linear-gradient(135deg,var(--ink) 0%,var(--ink-soft) 55%,var(--accent-soft) 130%);display:flex;align-items:center;justify-content:center;font-size:4.5rem;margin-bottom:16px;}
+  .thumb-img{width:100%;height:100%;object-fit:cover;display:block;}
+  .lightbox-glyph{height:220px;border-radius:10px;background:linear-gradient(135deg,var(--ink) 0%,var(--ink-soft) 55%,var(--accent-soft) 130%);display:flex;align-items:center;justify-content:center;font-size:4.5rem;margin-bottom:16px;overflow:hidden;}
+  .lightbox-img{width:100%;height:100%;object-fit:contain;display:block;}
   .lightbox-sheet .cap{font-size:1.05rem;font-weight:600;color:var(--ink);display:block;margin-bottom:4px;}
   .lightbox-sheet .meta{font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:10px;}
   .star-btn{all:unset;position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:rgba(10,8,3,.4);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;line-height:1;cursor:pointer;}
@@ -493,6 +485,7 @@
   .modal-header{display:flex;align-items:center;padding:10px 10px;border-bottom:1px solid var(--border-soft);flex:none;}
   .modal-header-spacer{flex:1;}
   .modal-nav-btn{all:unset;font-size:.82rem;color:var(--text-muted);padding:8px 12px;border-radius:20px;cursor:pointer;}
+  .modal-nav-btn[hidden]{display:none;}
   .modal-nav-btn:hover{background:var(--border-soft);color:var(--text);}
   .modal-close{font-size:1.1rem;line-height:1;padding:6px 11px;}
   .modal-body{padding:6px 24px 26px;overflow-y:auto;}
@@ -549,20 +542,15 @@
   .segmented{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.85rem;color:var(--text);}
   .segmented label{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400;}
 
-  /* ---------- path finder ---------- */
-  .pf-summary{font-size:.92rem;margin-bottom:12px;}
-  .pf-summary b{color:var(--ink);}
-  .pf-chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.85rem;}
-  .pf-chip{all:unset;padding:7px 13px;border-radius:20px;background:var(--surface-raised);border:1px solid var(--border);color:var(--text);cursor:pointer;font-weight:500;}
-  .pf-chip:hover{border-color:var(--accent);color:var(--ink);}
-  .pf-chip:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
-  .pf-hop{color:var(--text-faint);font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;}
-
   /* ---------- upload form ---------- */
   .upload-card.editing{align-items:stretch;justify-content:flex-start;}
   .upload-form{display:flex;flex-direction:column;gap:8px;width:100%;padding:14px;text-align:left;}
   .upload-form input,.upload-form textarea{font-family:inherit;font-size:.82rem;padding:7px 9px;border-radius:6px;border:1px solid var(--border);background:var(--surface-raised);color:var(--text);resize:vertical;}
   .upload-form input:focus,.upload-form textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  .file-drop{position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;border:1.5px dashed var(--border);border-radius:8px;font-size:.82rem;color:var(--text-muted);padding:8px;text-align:center;cursor:pointer;}
+  .file-drop:hover,.file-drop:focus-within{border-color:var(--accent);color:var(--accent);}
+  .up-preview-img{max-width:100%;max-height:160px;border-radius:8px;display:block;margin:0 auto;object-fit:contain;}
+  .up-preview-doc{font-size:.82rem;color:var(--text-muted);background:var(--border-soft);border-radius:8px;padding:8px 12px;text-align:center;}
 </style>
 </head>
 <body>
@@ -601,11 +589,6 @@
         <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><rect x="6" y="1.5" width="4" height="7" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 7.5c0 2.5 2 4.2 4.5 4.2s4.5-1.7 4.5-4.2M8 11.7v2.3M6 14h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         <span class="label">Record a Story</span>
       </button>
-      <button data-view="story">
-        <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><path d="M8 3.2C7 2.3 5 2 2 2.4v9.4c3-.4 5-.1 6 .8M8 3.2c1-.9 3-1.2 6-.8v9.4c-3-.4-5-.1-6 .8V3.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
-        <span class="label">A Story</span>
-        <span class="badge">multi-source</span>
-      </button>
       <button data-view="timeline">
         <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><path d="M1.5 8h13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="4" cy="8" r="1.4" fill="currentColor"/><circle cx="8.5" cy="8" r="1.4" fill="currentColor"/><circle cx="12.5" cy="8" r="1.4" fill="currentColor"/></svg>
         <span class="label">Timeline</span>
@@ -618,10 +601,6 @@
       <button data-view="addperson">
         <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><circle cx="6.5" cy="5.5" r="2.6" stroke="currentColor" stroke-width="1.3"/><path d="M1.8 14c.5-2.8 2.4-4.3 4.7-4.3s4.2 1.5 4.7 4.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M12.5 4.5v4M10.5 6.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         <span class="label">Add a Person</span>
-      </button>
-      <button data-view="pathfinder">
-        <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><circle cx="3" cy="8" r="1.8" stroke="currentColor" stroke-width="1.3"/><circle cx="13" cy="8" r="1.8" stroke="currentColor" stroke-width="1.3"/><path d="M4.8 8h6.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="1.6 1.8"/></svg>
-        <span class="label">How Related?</span>
       </button>
     </nav>
 
@@ -703,7 +682,6 @@
           <button class="ghost-btn" id="exportSvgBtn">Export image</button>
         </div>
       </div>
-      <div class="path-banner print-hide" id="pathHighlightBanner" hidden></div>
       <div class="path-banner print-hide" id="focusModeBanner" hidden></div>
       <div class="tree-wrap">
         <svg class="tree" id="treeSvgBrowse" viewBox="0 0 1100 760"></svg>
@@ -831,68 +809,6 @@
       </div>
     </section>
 
-    <!-- ============ STORY ============ -->
-    <section class="view" data-view="story">
-      <div class="view-head">
-        <h1>One story, several sources</h1>
-        <p>Every story is its own entity. Every recording, letter or document that touches it stays linked underneath — and when accounts disagree, the story favors whoever was actually there.</p>
-      </div>
-
-      <div class="card story-head">
-        <span class="tier-badge t1"><i style="width:6px;height:6px;border-radius:50%;background:currentColor;"></i>Tier 1 · life story</span>
-        <h2>Meeting Dorothy at the Grange Hall</h2>
-        <p class="story-summary">Fall 1959. <a class="namelink" data-id="frank">Frank Alden</a>, nineteen and working the counter at Alden's Lunar Diner, meets <a class="namelink" data-id="dorothy">Dorothy Marsh</a> when she comes in with the church choir. Weeks later he asks her to dance at the Grange Hall — before the band has finished tuning up. They marry in 1962, with <a class="namelink" data-id="hollis" data-kind="peripheral">Reverend Hollis</a> presiding at St. Aidan's.</p>
-        <div class="story-tags">
-          <a class="namelink" data-id="frank">Frank Alden</a><a class="namelink" data-id="dorothy">Dorothy Alden</a><span>1959–1962</span><span>Springfield</span>
-        </div>
-      </div>
-
-      <div>
-        <div class="rail-label" style="margin-bottom:8px;">Built from 4 linked sources, newest first</div>
-        <div class="sources">
-          <div class="card source">
-            <span class="rank">04</span>
-            <div class="source-body">
-              <a class="namelink who" data-id="jim">Jim Alden</a>
-              <span class="meta">recording · Aug 3, 2026 · relayed from Frank</span>
-              <p class="quote">"Grange Hall, fall of '59. I asked her before the band even finished tuning up."</p>
-            </div>
-            <span class="conf med">secondhand, same day</span>
-          </div>
-          <div class="card source">
-            <span class="rank">03</span>
-            <div class="source-body">
-              <a class="namelink who" data-id="frank">Frank Alden</a>
-              <span class="meta">recorded interview · Jun 14, 2019 · present at the event</span>
-              <p class="quote">"I asked her before the band even finished tuning up. Married her three years after — should've asked sooner."</p>
-            </div>
-            <span class="conf high">first‑person</span>
-          </div>
-          <div class="card source">
-            <span class="rank">02</span>
-            <div class="source-body">
-              <a class="namelink who" data-id="dorothy">Dorothy Alden</a>
-              <span class="meta">letter to grandchildren · c. 1998 · present at the event</span>
-              <p class="quote">"…he asked me to dance before the band was even ready. I said yes before I'd thought about it."</p>
-            </div>
-            <span class="conf high">first‑person</span>
-          </div>
-          <div class="card source">
-            <span class="rank">01</span>
-            <div class="source-body">
-              <a class="namelink who" data-id="helen">Helen Reyes</a>
-              <span class="meta">recorded interview · 2003 · not present, retold ~44 yrs later</span>
-              <p class="quote">"The way I heard it, Frank asked her by the punch bowl."</p>
-            </div>
-            <span class="conf med">secondhand, distant</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="resolution">
-        <b>How the story picked a version:</b> Frank's and Dorothy's accounts agree, and both were there — so the dance-floor version is used as the canonical story. Helen's punch-bowl detail wasn't dropped; it's kept on her source record as a variant, tagged secondhand and told decades after the fact, which is why it didn't outweigh two matching first-person accounts.
-      </div>
-    </section>
 
     <!-- ============ TIMELINE ============ -->
     <section class="view" data-view="timeline">
@@ -960,7 +876,7 @@
               <label><input type="radio" name="apRelation" value="spouse"> Spouse of…</label>
             </div>
           </fieldset>
-          <div id="apChildFields" style="display:flex;flex-direction:column;gap:14px;">
+          <div id="apChildFields" class="ap-child-fields">
             <label class="form-field">
               <span class="form-label">Parent</span>
               <select id="apParent1"></select>
@@ -979,22 +895,6 @@
           <button type="submit" class="rec-btn" style="align-self:flex-start;">Add to the tree</button>
           <div class="merge-status" id="apStatus" aria-live="polite"></div>
         </form>
-      </div>
-    </section>
-
-    <!-- ============ PATH FINDER ============ -->
-    <section class="view" data-view="pathfinder">
-      <div class="view-head">
-        <h1>How are we related?</h1>
-        <p>Pick anyone in either tree and see the actual chain connecting them to someone else — not just the label at the end of it.</p>
-      </div>
-      <div class="card" style="padding:20px 22px;display:flex;flex-direction:column;gap:16px;">
-        <div class="form-row">
-          <label class="form-field"><span class="form-label">Person A</span><select id="pfA"></select></label>
-          <label class="form-field"><span class="form-label">Person B</span><select id="pfB"></select></label>
-        </div>
-        <button type="button" class="rec-btn" id="pfFind" style="align-self:flex-start;">Find the connection</button>
-        <div id="pfResult" aria-live="polite"></div>
       </div>
     </section>
 
@@ -1279,68 +1179,6 @@
   // the same question by actually walking the graph and handing back every
   // person on the way, so "how are we related" can show the real chain
   // instead of just the word at the end of it.
-  function pathToAncestor(id, ancestorId, seen){
-    if (id===ancestorId) return [];
-    seen = seen || {};
-    if (seen[id]) return null;
-    seen[id] = true;
-    var parents = PARENTS[id]||[];
-    for (var i=0;i<parents.length;i++){
-      var p = parents[i];
-      var anc = ancestorsWithDepth(p);
-      if (p===ancestorId || anc[ancestorId]!==undefined){
-        var sub = pathToAncestor(p, ancestorId, seen);
-        if (sub) return [p].concat(sub);
-      }
-    }
-    return null;
-  }
-  function bloodChain(v,t){
-    if (v===t) return [v];
-    var av = ancestorsWithDepth(v), at = ancestorsWithDepth(t);
-    if (av[t]!==undefined) return [v].concat(pathToAncestor(v,t));
-    if (at[v]!==undefined){
-      var up = pathToAncestor(t,v), chain = up.slice().reverse();
-      chain.push(t);
-      return chain;
-    }
-    var best = nearestCommonAncestor(v,t);
-    if (!best) return null;
-    var upV = pathToAncestor(v,best.id), upT = pathToAncestor(t,best.id);
-    var downT = upT.slice(0,-1).reverse();
-    return [v].concat(upV).concat(downT).concat([t]);
-  }
-  function relationshipChain(v,t,_depth){
-    _depth = _depth||0;
-    if (_depth>4) return null;
-    if (v===t) return [v];
-    if (isSpouse(v,t)) return [v,t];
-    var blood = bloodChain(v,t);
-    if (blood) return blood;
-    if (stepParentsOf(v).indexOf(t)>-1){
-      var p = (PARENTS[v]||[]).filter(function(pp){ return spouseOf(pp)===t; })[0];
-      return p ? [v,p,t] : null;
-    }
-    if (stepParentsOf(t).indexOf(v)>-1){
-      var p2 = (PARENTS[t]||[]).filter(function(pp){ return spouseOf(pp)===v; })[0];
-      return p2 ? [v,p2,t] : null;
-    }
-    if (PARENTS[v] && PARENTS[t] && sharedParents(v,t).length===0){
-      var pv = PARENTS[v].filter(function(p){ return spouseOf(p) && (PARENTS[t]||[]).indexOf(spouseOf(p))>-1; })[0];
-      if (pv) return [v,pv,spouseOf(pv),t];
-    }
-    var tSpouse = spouseOf(t);
-    if (tSpouse && tSpouse!==v){
-      var sub = relationshipChain(v,tSpouse,_depth+1);
-      if (sub) return sub.concat([t]);
-    }
-    var vSpouse = spouseOf(v);
-    if (vSpouse && vSpouse!==t){
-      var sub2 = relationshipChain(vSpouse,t,_depth+1);
-      if (sub2) return [v].concat(sub2);
-    }
-    return null;
-  }
   function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
   // Every name, caption, and free-text tag in this app is typed by whoever's
   // using it (Add a Person, Edit Person, the photo upload form) and then
@@ -1418,7 +1256,7 @@
   function storyCountFor(id){ return TIMELINE.filter(function(e){ return e.people.indexOf(id)>-1; }).length; }
   function photoCountFor(id){ return PHOTOS.filter(function(p){ return p.tags.some(function(t){ return t.id===id; }); }).length; }
 
-  var state = { viewer:"jim", myGrants:{}, collapsed:{}, recentlyViewed:{}, timelineFilter:null, pathHighlight:null, colorByGeneration:false, colorByBranch:false, focusMode:false, focusPerson:null, focusLineageSet:null }; // collapsed: unit-key -> true; recentlyViewed: viewer -> array of ids; pathHighlight: array of ids from the path finder, or null
+  var state = { viewer:"jim", myGrants:{}, collapsed:{}, recentlyViewed:{}, timelineFilter:null, colorByGeneration:false, colorByBranch:false, focusMode:false, focusPerson:null, focusLineageSet:null }; // collapsed: unit-key -> true; recentlyViewed: viewer -> array of ids
   // Reuses tierFor directly (rather than re-deriving the same rule) so the
   // Manage Access starting state can never drift from what Family Tree
   // actually shows for the same pair of people.
@@ -1717,6 +1555,18 @@
     var satRelation = {}, satCaptions = [], satPointers = [];
     var satY = maxMainY + 72;
     findForeignClusters(viewer, mainSet, positions).forEach(function(cluster){
+      // The dotted line into an in-law's own family of origin is exactly
+      // where you'd expect to be able to fold that whole side away — not
+      // just the branches inside it, which is all collectToggles below
+      // covers. This is the toggle for the cluster as a single unit: hide
+      // an anchor's entire outside family in one click, badge showing how
+      // many people that folds away, same shape as every other toggle.
+      var satUk = "sat:"+cluster.anchor;
+      var anchorPos = positions[cluster.anchor];
+      if (state.collapsed[satUk]){
+        toggles.push({ uk:satUk, x:anchorPos.x, y:anchorPos.y+anchorPos.h, collapsed:true, hiddenCount:Object.keys(cluster.memberSet).length, sat:true });
+        return;
+      }
       var fullSatTree = buildUnitTree(cluster.anchor, cluster.memberSet);
       var satTree = pruneCollapsed(fullSatTree);
       var satWidthOf = function(u){ return u.members.length===2 ? 2*NW_SAT+SAT_GAP_X : NW_SAT; };
@@ -1750,10 +1600,10 @@
         var topXs = topUnit.members.map(function(m){ return positions[m].x; });
         var topCx = (Math.min.apply(null,topXs)+Math.max.apply(null,topXs))/2;
         var topY = positions[topUnit.members[0]].y;
-        var anchorPos = positions[cluster.anchor];
         satPointers.push({ x1:anchorPos.x, y1:anchorPos.y+anchorPos.h, x2:topCx, y2:topY });
         satCaptions.push({ x:topCx, y:topY-14, text:PEOPLE[cluster.anchor].name.split(" ")[0]+"’s family of origin" });
       }
+      toggles.push({ uk:satUk, x:anchorPos.x, y:anchorPos.y+anchorPos.h, collapsed:false, hiddenCount:0, sat:true });
       satY += (satMaxRow-satMinRow+1)*SAT_GAP_ROW + 46;
     });
 
@@ -1867,7 +1717,6 @@
     if (isSat) classes.push("satellite");
     if (id===SELF[viewer]) classes.push("self");
     if (diedYear) classes.push("deceased");
-    if (state.pathHighlight && state.pathHighlight.indexOf(id)>-1) classes.push("path-highlight");
     if (state.colorByGeneration && !isSat){
       var gen = relativeGeneration(viewer, id);
       var genIdx = gen===null || gen===undefined ? 3 : Math.max(0, Math.min(6, gen+3));
@@ -2063,14 +1912,27 @@
     svg.addEventListener("pointerdown", function(e){
       if (e.button!==0 && e.pointerType==="mouse") return;
       pointers[e.pointerId] = {x:e.clientX, y:e.clientY};
-      try { svg.setPointerCapture(e.pointerId); } catch(err){}
       var ids = Object.keys(pointers);
       if (ids.length===2){
         dragging = false;
         pinchDist = dist(pointers[ids[0]], pointers[ids[1]]);
+        // Two fingers down is unambiguously a gesture, never a tap — safe
+        // to capture immediately so the pinch stays smooth even if a
+        // finger strays outside the svg's bounds.
+        try { svg.setPointerCapture(e.pointerId); } catch(err){}
       } else if (ids.length===1){
         dragging=true; moved=false; lastX=e.clientX; lastY=e.clientY;
         svg.classList.add("panning");
+        // Deliberately NOT capturing here. setPointerCapture retargets not
+        // just the follow-up pointer events but the eventual "click" the
+        // browser synthesizes from this same gesture — permanently, no
+        // matter how early it's later released — so capturing on every
+        // press would silently break clicking any node whenever the down
+        // and up happen to land in the same place (i.e. an ordinary tap).
+        // Capture only kicks in once pointermove below confirms this has
+        // actually become a drag, by which point a stray click getting
+        // retargeted to the svg doesn't matter — the swallow logic in
+        // endDrag already suppresses it for a real drag.
       }
     });
     svg.addEventListener("pointermove", function(e){
@@ -2086,13 +1948,17 @@
       }
       if (!dragging) return;
       var dx=e.clientX-lastX, dy=e.clientY-lastY;
-      if (Math.abs(dx)>3||Math.abs(dy)>3) moved=true;
+      if (!moved && (Math.abs(dx)>3||Math.abs(dy)>3)){
+        moved=true;
+        try { svg.setPointerCapture(e.pointerId); } catch(err){}
+      }
       var ctm = svg.getScreenCTM(), s = ctm ? ctm.a : 1;
       view.tx += dx/s; view.ty += dy/s;
       lastX=e.clientX; lastY=e.clientY;
       apply();
     });
     function endDrag(e){
+      try { svg.releasePointerCapture(e.pointerId); } catch(err){}
       delete pointers[e.pointerId];
       var ids = Object.keys(pointers);
       if (ids.length===1){
@@ -2243,11 +2109,11 @@
   };
   var modalStack = [];
   var modalOpener = null; // element to return focus to once the whole stack closes
-  function openProfile(id){
+  function openProfile(id, tab){
     if (!PEOPLE[id] && !PERIPHERAL[id]) return;
     var wasClosed = modalStack.length===0;
     if (wasClosed) modalOpener = document.activeElement;
-    modalStack.push({id:id, tab:"overview"});
+    modalStack.push({id:id, tab: tab||"overview"});
     renderModal();
     if (wasClosed) document.getElementById("modalClose").focus();
     if (PEOPLE[id]) trackRecentlyViewed(id);
@@ -2386,7 +2252,7 @@
     var p = PEOPLE[id], viewer = state.viewer;
     var tier = id===SELF[viewer] ? 3 : tierFor(viewer, id);
     var tierNames = {1:"Tier 1 — life story only",2:"Tier 2 — personal archive",3:"Tier 3 — full private access"};
-    var stories = storyCountFor(id), photos = photoCountFor(id);
+    var stories = storiesFor(id).length, photos = photoCountFor(id);
     var famHtml = [
       familyRow("Spouse", spouseOf(id)?[spouseOf(id)]:[]),
       familyRow("Parents", PARENTS[id]||[]),
@@ -2535,9 +2401,34 @@
       if (e.pending) pillHtml += state.merged ? '<span class="t-pill confirmed">confirmed</span>' : '<span class="t-pill pending">pending review</span>';
       if (e.link){
         var linkLabel = e.link.type==="story" ? "view story →" : "view photos →";
-        pillHtml += '<span class="t-pill link" data-link-type="'+e.link.type+'" data-link-match="'+(e.link.match||"")+'">'+linkLabel+'</span>';
+        pillHtml += '<span class="t-pill link" data-link-type="'+e.link.type+'" data-link-match="'+(e.link.match||"")+'" data-story-person="'+(e.people[0]||"")+'">'+linkLabel+'</span>';
       }
       return '<div class="t-entry"><span class="t-date">'+e.date+'</span><div class="t-body"><span class="title">'+e.title+'</span>'+(e.desc?'<span class="desc">'+e.desc+'</span>':'')+'</div>'+pillHtml+'</div>';
+    }).join("")+'</div>';
+  }
+  // Timeline holds every dated fact (born, married, moved) whether or not
+  // anyone ever told the story behind it; a "story" here means an entry
+  // that actually has one — real recorded/written narrative, not just a
+  // year. A short location fragment like "Springfield." doesn't count; a
+  // sentence about what happened does. Threshold is a proxy, not a real
+  // classifier, but it's a real filter over the same TIMELINE data rather
+  // than a second hand-maintained list.
+  function isStoryEntry(e){ return !!(e.desc && e.desc.length>=15); }
+  function storiesFor(id){ return TIMELINE.filter(function(e){ return e.people.indexOf(id)>-1 && isStoryEntry(e); }); }
+  function buildStoriesPane(id){
+    var entries = storiesFor(id).slice().reverse();
+    if (!entries.length) return '<div class="empty-cta"><p class="empty-note">No stories recorded for '+esc(PEOPLE[id].name.split(" ")[0])+' yet.</p><button type="button" class="ghost-btn" data-action="goto-record">Record a story →</button></div>';
+    return '<div class="stories-pane">'+entries.map(function(e){
+      var pendingHtml = e.pending ? '<span class="t-pill pending">pending review</span>' : "";
+      var peopleHtml = e.people.filter(function(pid){ return pid!==id && PEOPLE[pid]; }).map(function(pid){
+        return '<button type="button" class="namelink" data-id="'+pid+'">'+esc(PEOPLE[pid].name)+'</button>';
+      }).join("");
+      return '<div class="card story-card">'+
+        '<div class="story-card-head"><span class="t-date">'+esc(e.date)+'</span>'+pendingHtml+'</div>'+
+        '<h4 class="story-card-title">'+esc(e.title)+'</h4>'+
+        '<p class="story-card-desc">'+esc(e.desc)+'</p>'+
+        (peopleHtml ? '<div class="tags">'+peopleHtml+'</div>' : '')+
+      '</div>';
     }).join("")+'</div>';
   }
   function buildPhotosPane(id){
@@ -2545,7 +2436,7 @@
     var pics = PHOTOS.filter(function(ph){ return ph.tags.some(function(t){ return t.id===id; }); });
     if (!pics.length) return '<div class="empty-cta"><p class="empty-note">No photos or documents tagged for '+esc(name.split(" ")[0])+' yet.</p><button type="button" class="ghost-btn" data-action="goto-archive">Add a photo or document →</button></div>';
     return '<div class="archive-grid">'+pics.map(function(ph){
-      return '<div class="card photo"><div class="thumb" data-glyph="'+ph.glyph+'"></div><div class="photo-body"><span class="cap">'+esc(ph.cap)+'</span><span class="meta">'+esc(ph.meta)+'</span>'+
+      return '<div class="card photo">'+thumbHtml(ph)+'<div class="photo-body"><span class="cap">'+esc(ph.cap)+'</span><span class="meta">'+esc(ph.meta)+'</span>'+
         '<div class="tags">'+ph.tags.map(function(t){
           return t.id ? '<button type="button" class="namelink" data-id="'+t.id+'">'+esc(tagLabel(t))+'</button>' : '<span>'+esc(tagLabel(t))+'</span>';
         }).join("")+'</div></div></div>';
@@ -2566,11 +2457,11 @@
     if (tab==="edit"){
       return head+'<div class="profile-pane">'+buildEditPane(id)+'</div>';
     }
-    var tabs = [["overview","Overview"],["timeline","Timeline"],["photos","Photos"]];
+    var tabs = [["overview","Overview"],["timeline","Timeline"],["stories","Stories"],["photos","Photos"]];
     var tabsHtml = '<div class="profile-tabs">'+tabs.map(function(t){
       return '<button class="profile-tab'+(t[0]===tab?" active":"")+'" data-tab="'+t[0]+'">'+t[1]+'</button>';
     }).join("")+'</div>';
-    var pane = tab==="timeline" ? buildTimelinePane(id) : tab==="photos" ? buildPhotosPane(id) : buildOverviewPane(id);
+    var pane = tab==="timeline" ? buildTimelinePane(id) : tab==="stories" ? buildStoriesPane(id) : tab==="photos" ? buildPhotosPane(id) : buildOverviewPane(id);
     return head+scopeNote+tabsHtml+'<div class="profile-pane">'+pane+'</div>';
   }
   function buildPeripheralProfile(id){
@@ -2603,9 +2494,14 @@
     }
     body.querySelectorAll(".t-pill.link").forEach(function(pill){
       pill.addEventListener("click", function(){
-        closeModal();
-        if (pill.getAttribute("data-link-type")==="story"){ activateView("story"); }
-        else { activateView("archive"); flashPhoto(pill.getAttribute("data-link-match")); }
+        if (pill.getAttribute("data-link-type")==="story"){
+          var storyPerson = pill.getAttribute("data-story-person");
+          closeModal();
+          if (storyPerson && PEOPLE[storyPerson]) openProfile(storyPerson, "stories");
+        } else {
+          closeModal();
+          activateView("archive"); flashPhoto(pill.getAttribute("data-link-match"));
+        }
       });
     });
     var gotoRecord = body.querySelector('[data-action="goto-record"]');
@@ -3144,8 +3040,6 @@
     // leaving them panned off into empty space.
     if (treeSvgBrowse._sk) treeSvgBrowse._sk.zoom.reset();
     if (treeSvgManage._sk) treeSvgManage._sk.zoom.reset();
-    state.pathHighlight = null;
-    renderPathBanner();
     renderAccessLog();
     state.focusMode = false; state.focusPerson = null; state.focusLineageSet = null;
     document.getElementById("focusModeToggle").classList.remove("active");
@@ -3156,8 +3050,6 @@
     renderManageSummary();
     renderLedger(); renderFamilyInsights(); renderOnThisDay(); renderNudgeList(); renderActivityFeed();
     renderRecentlyViewed();
-    var pfAEl = document.getElementById("pfA");
-    if (pfAEl) pfAEl.value = SELF[state.viewer];
   });
 
   /* ---------------- theme ----------------
@@ -3505,7 +3397,7 @@
       }
       if (entry.link){
         var linkLabel = entry.link.type==="story" ? "view story →" : "view photos →";
-        pillHtml += '<span class="t-pill link" data-link-type="'+entry.link.type+'" data-link-match="'+(entry.link.match||"")+'">'+linkLabel+'</span>';
+        pillHtml += '<span class="t-pill link" data-link-type="'+entry.link.type+'" data-link-match="'+(entry.link.match||"")+'" data-story-person="'+(entry.people[0]||"")+'">'+linkLabel+'</span>';
       }
       row.innerHTML =
         '<span class="t-date">'+entry.date+'</span>'+
@@ -3517,7 +3409,10 @@
   document.getElementById("ledger").addEventListener("click", function(e){
     var pill = e.target.closest(".t-pill.link");
     if (!pill) return;
-    if (pill.getAttribute("data-link-type")==="story"){ activateView("story"); }
+    if (pill.getAttribute("data-link-type")==="story"){
+      var storyPerson = pill.getAttribute("data-story-person");
+      if (storyPerson && PEOPLE[storyPerson]) openProfile(storyPerson, "stories");
+    }
     else { activateView("archive"); flashPhoto(pill.getAttribute("data-link-match")); }
   });
 
@@ -3537,6 +3432,15 @@
   var archiveFavoritesOnly = false;
   var archiveAlbumFilter = null;
   function tagLabel(t){ return t.id ? PEOPLE[t.id].name : t.text; }
+  // A handful of the seed photos are simulated (glyph only, no real file);
+  // anything actually uploaded gets its real image shown instead — the two
+  // need different markup (an <img> vs a CSS-attr glyph), so every grid
+  // that renders a thumbnail goes through this one place.
+  function thumbHtml(p, extraAttrs, innerHtml){
+    var attrs = extraAttrs || "", inner = innerHtml || "";
+    if (p.dataUrl && p.isImage) return '<div class="thumb" '+attrs+'><img src="'+esc(p.dataUrl)+'" alt="" class="thumb-img">'+inner+'</div>';
+    return '<div class="thumb" data-glyph="'+esc(p.glyph)+'" '+attrs+'>'+inner+'</div>';
+  }
   function visiblePhotos(){
     return PHOTOS.filter(function(p){
       if (archiveFavoritesOnly && !p.starred) return false;
@@ -3579,9 +3483,8 @@
       var el = document.createElement("div");
       el.className = "card photo";
       el.innerHTML =
-        '<div class="thumb" data-glyph="'+p.glyph+'" data-idx="'+idx+'" role="button" tabindex="0" aria-label="View '+esc(p.cap)+' full size">'+
-          '<button type="button" class="star-btn'+(p.starred?" starred":"")+'" data-idx="'+idx+'" aria-label="'+(p.starred?"Remove from favorites":"Add to favorites")+'" aria-pressed="'+(p.starred?"true":"false")+'">'+(p.starred?"★":"☆")+'</button>'+
-        '</div>'+
+        thumbHtml(p, 'data-idx="'+idx+'" role="button" tabindex="0" aria-label="View '+esc(p.cap)+' full size"',
+          '<button type="button" class="star-btn'+(p.starred?" starred":"")+'" data-idx="'+idx+'" aria-label="'+(p.starred?"Remove from favorites":"Add to favorites")+'" aria-pressed="'+(p.starred?"true":"false")+'">'+(p.starred?"★":"☆")+'</button>')+
         '<div class="photo-body"><span class="cap">'+esc(p.cap)+'</span><span class="meta">'+esc(p.meta)+(p.album?' · '+esc(p.album):'')+'</span>'+
         '<div class="tags">'+p.tags.map(function(t){
           return t.id ? '<button type="button" class="namelink" data-id="'+t.id+'">'+esc(tagLabel(t))+'</button>' : '<span>'+esc(tagLabel(t))+'</span>';
@@ -3639,7 +3542,12 @@
   function renderLightbox(){
     var p = PHOTOS[lightboxIdx];
     if (!p) return;
-    document.getElementById("lightboxGlyph").textContent = p.glyph;
+    var glyphEl = document.getElementById("lightboxGlyph");
+    if (p.dataUrl && p.isImage){
+      glyphEl.innerHTML = '<img src="'+esc(p.dataUrl)+'" alt="" class="lightbox-img">';
+    } else {
+      glyphEl.textContent = p.glyph;
+    }
     var body = document.getElementById("lightboxBody");
     if (lightboxEditing){
       body.innerHTML =
@@ -3701,11 +3609,17 @@
     btn.addEventListener("click", function(){ renderUploadForm(wrap); });
     wrap.appendChild(btn);
   }
+  var MAX_UPLOAD_BYTES = 8*1024*1024;
   function renderUploadForm(wrap){
     wrap.classList.add("editing");
     wrap.innerHTML =
       '<div class="upload-form">'+
         '<div class="rail-label">New upload</div>'+
+        '<label class="file-drop" id="upFileDrop" tabindex="0">'+
+          '<span id="upFileLabel">Choose a photo or document…</span>'+
+          '<input type="file" id="upFile" accept="image/*,.pdf,.doc,.docx,.txt" style="position:absolute;inset:0;opacity:0;cursor:pointer;">'+
+        '</label>'+
+        '<div id="upPreviewWrap"></div>'+
         '<input type="text" placeholder="What is this? (caption)" id="upCaption">'+
         '<input type="text" placeholder="Who\'s in it?" id="upWho">'+
         '<input type="text" placeholder="Roughly when?" id="upWhen">'+
@@ -3717,13 +3631,42 @@
         '<div class="merge-status" id="upStatus" aria-live="polite"></div>'+
       '</div>';
     wrap.querySelector("#upCancel").addEventListener("click", function(){ renderUploadIdle(wrap); });
+    var uploadedDataUrl = null, uploadedIsImage = false;
+    var fileInput = wrap.querySelector("#upFile");
+    var status = wrap.querySelector("#upStatus");
+    fileInput.addEventListener("change", function(){
+      var file = fileInput.files[0];
+      status.classList.remove("ok");
+      status.textContent = "";
+      if (!file) return;
+      if (file.size > MAX_UPLOAD_BYTES){
+        status.textContent = "That file's too big to keep here (over 8MB) — try a smaller one.";
+        fileInput.value = "";
+        return;
+      }
+      uploadedIsImage = file.type.indexOf("image/")===0;
+      var reader = new FileReader();
+      reader.onload = function(){
+        uploadedDataUrl = reader.result;
+        wrap.querySelector("#upFileLabel").textContent = file.name;
+        var previewWrap = wrap.querySelector("#upPreviewWrap");
+        previewWrap.innerHTML = uploadedIsImage
+          ? '<img src="'+esc(uploadedDataUrl)+'" alt="" class="up-preview-img">'
+          : '<div class="up-preview-doc">📄 '+esc(file.name)+'</div>';
+        // A caption is the one field this form insists on — most people
+        // will just accept the filename rather than type a duplicate title.
+        var capInput = wrap.querySelector("#upCaption");
+        if (!capInput.value.trim()) capInput.value = file.name.replace(/\.[^.]+$/,"");
+      };
+      reader.readAsDataURL(file);
+    });
     wrap.querySelector("#upSave").addEventListener("click", function(){
       var cap = wrap.querySelector("#upCaption").value.trim() || "Untitled upload";
       var whoRaw = wrap.querySelector("#upWho").value.trim();
       var when = wrap.querySelector("#upWhen").value.trim();
       var saveBtn = wrap.querySelector("#upSave");
-      var status = wrap.querySelector("#upStatus");
       saveBtn.setAttribute("disabled","disabled");
+      status.classList.remove("ok");
       status.textContent = "Reading the description and linking it to matching people…";
       setTimeout(function(){
         // Match each typed name against the real cast — a hit links the
@@ -3735,9 +3678,12 @@
           var hit = Object.keys(PEOPLE).filter(function(id){ return PEOPLE[id].name.toLowerCase()===t.toLowerCase(); })[0];
           return hit ? {id:hit} : {text:t};
         });
-        PHOTOS.push({ glyph:"\u{1F4C4}", cap:cap, meta:(when?when+" · ":"")+"Just added", tags:tags });
+        var entry = { glyph: uploadedIsImage ? "\u{1F5BC}\u{FE0F}" : "\u{1F4C4}", cap:cap, meta:(when?when+" · ":"")+"Just added", tags:tags };
+        if (uploadedDataUrl){ entry.dataUrl = uploadedDataUrl; entry.isImage = uploadedIsImage; }
+        PHOTOS.push(entry);
         status.textContent = tags.length ? "Saved and tagged to "+tags.map(tagLabel).join(", ")+"." : "Saved — no one tagged yet, so it won't show on a profile.";
         status.classList.add("ok");
+        saveBtn.removeAttribute("disabled");
         setTimeout(renderArchive, 700);
       }, 900);
     });
@@ -3948,7 +3894,6 @@
       state.recentlyViewed[v] = state.recentlyViewed[v].map(function(pid){ return pid===dupId?targetId:pid; })
         .filter(function(pid, idx, arr){ return arr.indexOf(pid)===idx; });
     });
-    if (state.pathHighlight && state.pathHighlight.indexOf(dupId)>-1) state.pathHighlight = null;
     if (state.focusPerson===dupId) state.focusPerson = targetId;
     if (state.focusLineageSet && state.focusLineageSet[dupId]){ delete state.focusLineageSet[dupId]; state.focusLineageSet[targetId] = true; }
     var dupName = PEOPLE[dupId].name;
@@ -4023,55 +3968,8 @@
     populatePersonSelect(document.getElementById("apParent1"), false);
     populatePersonSelect(document.getElementById("apParent2"), true);
     populatePersonSelect(document.getElementById("apSpouseOf"), false);
-    populatePersonSelect(document.getElementById("pfA"), false);
-    populatePersonSelect(document.getElementById("pfB"), false);
   }
   refreshPersonSelects();
-  document.getElementById("pfA").value = SELF[state.viewer];
-  function renderPathResult(){
-    var vId = document.getElementById("pfA").value, tId = document.getElementById("pfB").value;
-    var result = document.getElementById("pfResult");
-    if (!vId || !tId || !PEOPLE[vId] || !PEOPLE[tId]) return;
-    if (vId===tId){ result.innerHTML = '<p class="empty-note">That\'s the same person — pick two different people.</p>'; return; }
-    var label = relationLabel(vId, tId);
-    var summary = '<p class="pf-summary">'+esc(PEOPLE[tId].name)+" is "+esc(PEOPLE[vId].name)+"'s <b>"+esc(label||"extended family")+"</b>.</p>";
-    var chain = relationshipChain(vId, tId);
-    if (!chain || chain.length<2){
-      result.innerHTML = summary+'<p class="empty-note">The connection is too indirect to trace step by step, but that\'s the relationship.</p>';
-      return;
-    }
-    var chainHtml = chain.map(function(id,i){
-      var chip = '<button type="button" class="namelink pf-chip" data-id="'+id+'">'+esc(PEOPLE[id].name)+'</button>';
-      if (i===chain.length-1) return chip;
-      var next = chain[i+1];
-      var hop = (PARENTS[id]||[]).indexOf(next)>-1 ? "parent →"
-        : (PARENTS[next]||[]).indexOf(id)>-1 ? "child →"
-        : isSpouse(id,next) ? "spouse →" : "→";
-      return chip+'<span class="pf-hop">'+hop+'</span>';
-    }).join("");
-    result.innerHTML = summary+'<div class="pf-chain">'+chainHtml+'</div>'+
-      '<button type="button" class="ghost-btn" id="pfShowOnTree" style="margin-top:12px;">Show this path on the tree →</button>';
-    document.getElementById("pfShowOnTree").addEventListener("click", function(){
-      state.pathHighlight = chain;
-      activateView("tree");
-      renderBothTrees();
-      renderPathBanner();
-    });
-  }
-  function renderPathBanner(){
-    var el = document.getElementById("pathHighlightBanner");
-    if (!el) return;
-    if (!state.pathHighlight){ el.hidden = true; return; }
-    el.hidden = false;
-    el.innerHTML = '<span>Showing the path from '+esc(PEOPLE[state.pathHighlight[0]].name)+' to '+esc(PEOPLE[state.pathHighlight[state.pathHighlight.length-1]].name)+'.</span>'+
-      '<button type="button" class="ghost-btn" id="pathHighlightClear">Clear</button>';
-    document.getElementById("pathHighlightClear").addEventListener("click", function(){
-      state.pathHighlight = null;
-      renderBothTrees();
-      renderPathBanner();
-    });
-  }
-  document.getElementById("pfFind").addEventListener("click", renderPathResult);
 
   function setFocusPerson(id){
     state.focusPerson = id;
