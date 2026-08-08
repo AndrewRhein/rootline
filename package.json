@@ -1,0 +1,15 @@
+{
+  "name": "rootline",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rootline family archive — AI-powered genealogy app",
+  "scripts": {
+    "dev": "vercel dev",
+    "db:init": "node scripts/init-db.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "@vercel/blob": "^1.1.1",
+    "@vercel/postgres": "^0.10.0"
+  }
+}

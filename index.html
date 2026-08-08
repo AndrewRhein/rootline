@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rootline — a family archive (trial)</title>
-<meta name="description" content="Interactive concept demo: oral-history recorder, self-building tree, tiered privacy, and multi-source stories.">
+<title>Rootline — a family archive</title>
+<meta name="description" content="An AI-powered family archive: record a conversation and it catalogs the people, relationships, and stories itself — a self-building tree, tiered privacy, and a shared timeline.">
 <style>
   :root{
     --ink:#14261F; --ink-soft:#2C4A3D;
@@ -88,6 +88,8 @@
   .namelink-preview .np-body small{color:var(--text-faint);font-size:.7rem;}
   .orphan-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,12px);max-width:min(92vw,440px);background:var(--ink);color:var(--surface-raised);font-size:.82rem;line-height:1.5;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow-lg);opacity:0;transition:opacity .3s ease,transform .3s ease;z-index:200;}
   .orphan-toast.show{opacity:1;transform:translate(-50%,0);}
+  .undo-btn{all:unset;text-decoration:underline;cursor:pointer;font-weight:600;color:inherit;}
+  .undo-btn:focus-visible{outline:2px solid var(--surface-raised);outline-offset:2px;}
   @media (prefers-reduced-motion: reduce){ .orphan-toast{transition:opacity .01s linear;transform:translate(-50%,0);} }
   *{box-sizing:border-box;}
   html,body{background:var(--bg);color:var(--text);font-family:var(--sans);}
@@ -128,6 +130,7 @@
     .menu-btn{all:unset;display:flex;align-items:center;justify-content:center;width:36px;height:36px;
       border-radius:8px;cursor:pointer;color:var(--ink);flex:none;}
     .menu-btn:hover{background:var(--border-soft);}
+    .menu-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
     .mobile-topbar .mark{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--ink);}
     .rail-backdrop.open{display:block;position:fixed;inset:0;background:rgba(10,8,3,.42);z-index:140;}
     /* Native pinch-zoom already covers "get an overview" on a touch
@@ -383,7 +386,9 @@
   .rec-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
   .rec-head h3{font-size:1rem;}
   .rec-with{font-size:.78rem;color:var(--text-muted);font-family:var(--mono);}
-  .rec-btn{all:unset;display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--surface-raised);padding:9px 16px;border-radius:24px;font-size:.85rem;}
+  .rec-btn{all:unset;display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--surface-raised);padding:9px 16px;border-radius:24px;font-size:.85rem;cursor:pointer;}
+  .rec-btn.stop{background:var(--wine);color:var(--surface-raised);}
+  .rec-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .rec-btn:hover{background:var(--ink-soft);}
   .rec-btn[disabled]{opacity:.5;cursor:default;}
   .rec-dot{width:9px;height:9px;border-radius:50%;background:var(--wine);}
@@ -418,6 +423,9 @@
   .merge-box{display:flex;flex-direction:column;gap:10px;padding-top:6px;border-top:1px solid var(--border-soft);}
   .merge-status{font-size:.82rem;color:var(--text-muted);min-height:1.3em;}
   .merge-status.ok{color:var(--sage);}
+  .ai-action-log{margin:4px 0 10px;}
+  .ai-applied-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;}
+  .ai-applied-list li{font-size:.82rem;line-height:1.45;padding:8px 12px;border-radius:10px;background:var(--surface-raised);border:1px solid var(--border);opacity:0;animation:tin .3s forwards;}
 
   /* ---------- stories (profile tab) ---------- */
   .stories-pane{display:flex;flex-direction:column;gap:12px;}
@@ -444,6 +452,7 @@
   .t-pill{font-size:.66rem;font-family:var(--mono);padding:2px 7px;border-radius:20px;white-space:nowrap;}
   .t-pill.pending{background:color-mix(in srgb, var(--accent) 22%, transparent);color:var(--accent);}
   .t-pill.confirmed{background:color-mix(in srgb, var(--sage) 22%, transparent);color:var(--sage);}
+  .t-pill.ai-source{background:color-mix(in srgb, var(--branch) 22%, transparent);color:var(--branch);}
 
   /* ---------- archive ---------- */
   .archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;}
@@ -487,6 +496,7 @@
   .modal-nav-btn{all:unset;font-size:.82rem;color:var(--text-muted);padding:8px 12px;border-radius:20px;cursor:pointer;}
   .modal-nav-btn[hidden]{display:none;}
   .modal-nav-btn:hover{background:var(--border-soft);color:var(--text);}
+  .modal-nav-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
   .modal-close{font-size:1.1rem;line-height:1;padding:6px 11px;}
   .modal-body{padding:6px 24px 26px;overflow-y:auto;}
   @media (max-width:640px){
@@ -503,6 +513,7 @@
   .profile-tab{all:unset;font-size:.82rem;color:var(--text-muted);padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
   .profile-tab.active{color:var(--ink);border-color:var(--accent);font-weight:600;}
   .profile-tab:hover{color:var(--text);}
+  .profile-tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
   .profile-pane{display:flex;flex-direction:column;gap:14px;}
   .profile-fam{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
   .profile-fam-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.72rem;color:var(--text-muted);}
@@ -639,9 +650,9 @@
     </div>
 
     <button type="button" class="ghost-btn" id="shortcutsBtn" style="align-self:flex-start;">⌨ Keyboard shortcuts</button>
-    <button type="button" class="ghost-btn" id="resetDemoBtn" style="align-self:flex-start;">↺ Reset demo data</button>
-    <div class="rail-footer">
-      Trial build. The tree, permissions and archive are real interactions — the transcription and AI extraction are scripted for this demo, not live. Your theme, sharing tiers, and collapsed branches are remembered on this device; added people and photos reset on reload.
+    <button type="button" class="ghost-btn" id="resetDemoBtn" style="align-self:flex-start;">↺ Reset my view preferences</button>
+    <div class="rail-footer" id="modeFooter" aria-live="polite">
+      Checking for a connected archive…
     </div>
   </aside>
 
@@ -751,46 +762,38 @@
     <section class="view" data-view="record">
       <div class="view-head">
         <h1>Record a story</h1>
-        <p>Turn this on while visiting someone, and it listens, transcribes, and pulls out the people, places and dates worth keeping — for a human to confirm before it joins the archive. Below is a real example from the archive, playable no matter who's logged in.</p>
+        <p>Turn this on while visiting someone — it listens, transcribes live, and the moment you stop it reads the whole conversation and updates the archive itself: new people, corrected details, new relationships, new stories on the timeline. Nothing to review or approve — just check what it did below.</p>
       </div>
       <div class="record-grid">
         <div class="card recorder">
           <div class="rec-head">
-            <h3>Example: “Visiting Dad”</h3>
-            <span class="rec-with">Logged Aug 3, 2026 · Jim Alden's recording, with Frank</span>
+            <h3>New recording</h3>
+            <span class="rec-with">Recording as <span id="recAsName"></span></span>
           </div>
-          <div style="display:flex;align-items:center;gap:14px;">
-            <button class="rec-btn" id="recBtn"><span class="rec-dot"></span><span id="recBtnLabel">Play this recording</span></button>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <button class="rec-btn" id="recStartBtn"><span class="rec-dot"></span><span id="recStartLabel">Start recording</span></button>
+            <button class="rec-btn stop" id="recStopBtn" style="display:none;">Stop &amp; process</button>
             <div class="waveform" id="waveform"></div>
+            <span id="recTimer" style="font-variant-numeric:tabular-nums;color:var(--text-muted);font-size:.85rem;"></span>
           </div>
-          <div class="speaker-legend"><span><i class="jim"></i>Jim</span><span><i class="frank"></i>Frank</span></div>
+          <p class="empty-note" id="recSupportNote" style="padding:6px 0 0;"></p>
           <div class="search-wrap" style="margin-bottom:6px;">
             <input type="text" id="transcriptSearch" placeholder="Search this transcript…" autocomplete="off">
           </div>
-          <div class="transcript" id="transcript"><p class="t-empty">Transcript will appear here once recording starts…</p></div>
+          <div class="transcript" id="transcript"><p class="t-empty">Press “Start recording” — or paste a transcript below — to begin.</p></div>
           <p class="empty-note" id="transcriptSearchStatus" style="padding:4px 0 0;" aria-live="polite"></p>
+          <details id="pasteTranscriptDetails" style="margin-top:10px;">
+            <summary style="cursor:pointer;font-size:.8rem;color:var(--text-muted);">Or paste/type a transcript instead</summary>
+            <textarea id="pastedTranscript" rows="5" placeholder="Paste or type the conversation here…" style="width:100%;margin-top:8px;box-sizing:border-box;"></textarea>
+            <button class="rec-btn" id="processPastedBtn" style="margin-top:8px;">Process this transcript</button>
+          </details>
         </div>
 
         <div class="card extract">
-          <h3>Extracted so far</h3>
-          <div class="extract-group">
-            <div class="lbl">People</div>
-            <div class="chips" id="chipsPeople"></div>
-            <p style="font-size:.74rem;color:var(--text-faint);margin:0;">Someone outside the family — a neighbor, a doctor — still gets their own page here. They're just never added to the tree itself.</p>
-          </div>
-          <div class="extract-group">
-            <div class="lbl">Places</div>
-            <div class="chips" id="chipsPlaces"></div>
-          </div>
-          <div class="extract-group">
-            <div class="lbl">Dates &amp; events</div>
-            <div class="chips" id="chipsEvents"></div>
-          </div>
-          <div class="merge-box">
-            <button class="rec-btn" id="mergeBtn" disabled>Merge into archive</button>
-            <div class="merge-status" id="mergeStatus" aria-live="polite"></div>
-            <p style="font-size:.74rem;color:var(--text-faint);line-height:1.5;margin:0;">Only this recording gets processed — Frank's profile, this story, and the timeline. Nothing else is re‑scanned. A full profile rebuild can be triggered any time from that person's page.</p>
-          </div>
+          <h3>What the AI did</h3>
+          <p class="empty-note" id="aiIdleNote">Record or paste a conversation, then hit “Stop &amp; process” — the archive updates automatically, right here.</p>
+          <div id="aiActionLog" class="ai-action-log" hidden></div>
+          <div class="merge-status" id="mergeStatus" aria-live="polite"></div>
         </div>
       </div>
 
@@ -923,7 +926,7 @@
       <h3 id="shortcutsTitle" style="margin-bottom:14px;">Keyboard shortcuts</h3>
       <div class="shortcuts-list">
         <div><kbd>/</kbd><span>Focus the search box</span></div>
-        <div><kbd>1</kbd>–<kbd>8</kbd><span>Jump to a section</span></div>
+        <div><kbd>1</kbd>–<kbd>6</kbd><span>Jump to a section</span></div>
         <div><kbd>Esc</kbd><span>Close whatever's open</span></div>
         <div><kbd>?</kbd><span>Show this list</span></div>
       </div>
@@ -1028,6 +1031,122 @@
   Object.keys(PARENTS).forEach(function(c){
     PARENTS[c].forEach(function(p){ (CHILDREN_OF[p]=CHILDREN_OF[p]||[]).push(c); });
   });
+
+  /* ---------------- server sync ----------------
+     Everything above is the same seed data this app has always shipped
+     with, so it still renders instantly and works completely offline as a
+     local file. If /api/graph is reachable (i.e. this is running against a
+     real Vercel deployment with a database attached), hydrateFromServer()
+     swaps that seed data for the real persisted archive right after the
+     first render, and scheduleSave() persists every edit back to it —
+     mutating PEOPLE/PARENTS/etc. in place, the same pattern restoreSnapshot
+     already uses for undo, so every closure that captured these objects by
+     reference keeps working unchanged. Nothing above this line, and no
+     existing mutation function, needs to know or care whether a backend is
+     attached. */
+  var SYNC_ENABLED = true; // flips off if hydration finds no backend, so we stop trying to save into the void
+  var PASSPHRASE_KEY = "rootline-passphrase";
+  function apiHeaders(){
+    var h = {"Content-Type":"application/json"};
+    var pass = localStorage.getItem(PASSPHRASE_KEY);
+    if (pass) h["x-app-passphrase"] = pass;
+    return h;
+  }
+  function promptForPassphrase(retry){
+    var p = window.prompt("This family archive is protected. Enter the shared passphrase" + (retry ? " again — that one didn't work." : " to continue."));
+    if (p===null) return false;
+    localStorage.setItem(PASSPHRASE_KEY, p);
+    return true;
+  }
+  function replaceObjInPlace(target, src){
+    Object.keys(target).forEach(function(k){ delete target[k]; });
+    Object.assign(target, src||{});
+  }
+  function replaceArrInPlace(target, src){
+    target.length = 0;
+    (src||[]).forEach(function(v){ target.push(v); });
+  }
+  function buildGraphSnapshot(){
+    return { PEOPLE:PEOPLE, GENDER:GENDER, PARENTS:PARENTS, BIO_PARENTS:BIO_PARENTS, TIES:TIES, GRANTS:GRANTS, TIMELINE:TIMELINE, PHOTOS:PHOTOS };
+  }
+  var saveDebounceTimer = null, saveInFlight = false, saveQueuedAgain = false;
+  function scheduleSave(){
+    if (!SYNC_ENABLED) return;
+    clearTimeout(saveDebounceTimer);
+    saveDebounceTimer = setTimeout(runSave, 1500);
+  }
+  function runSave(){
+    if (saveInFlight){ saveQueuedAgain = true; return; }
+    saveInFlight = true;
+    fetch("api/graph", { method:"PUT", headers:apiHeaders(), body:JSON.stringify(buildGraphSnapshot()) })
+      .then(function(r){
+        if (r.status===401){
+          if (promptForPassphrase(true)) scheduleSave();
+          return;
+        }
+        if (!r.ok) throw new Error("save failed: "+r.status);
+      })
+      .catch(function(err){ console.warn("Rootline: could not save to the server — working locally only for now.", err); })
+      .then(function(){
+        saveInFlight = false;
+        if (saveQueuedAgain){ saveQueuedAgain = false; scheduleSave(); }
+      });
+  }
+  function hydrateFromServer(){
+    fetch("api/graph", { headers:apiHeaders() })
+      .then(function(r){
+        if (r.status===401){
+          if (promptForPassphrase(false)) return hydrateFromServer();
+          SYNC_ENABLED = false;
+          return null;
+        }
+        if (!r.ok) throw new Error("hydrate failed: "+r.status);
+        return r.json();
+      })
+      .then(function(data){
+        if (!data) return;
+        if (data.empty){
+          // A real backend is attached but nothing's been saved to it yet —
+          // push the seed data up now so the server becomes the source of
+          // truth from this point on, instead of every device starting
+          // over from the same hardcoded seed.
+          scheduleSave();
+          return;
+        }
+        replaceObjInPlace(PEOPLE, data.PEOPLE);
+        replaceObjInPlace(GENDER, data.GENDER);
+        replaceObjInPlace(PARENTS, data.PARENTS);
+        replaceObjInPlace(BIO_PARENTS, data.BIO_PARENTS);
+        replaceObjInPlace(GRANTS, data.GRANTS);
+        replaceArrInPlace(TIES, data.TIES);
+        replaceArrInPlace(TIMELINE, data.TIMELINE);
+        replaceArrInPlace(PHOTOS, data.PHOTOS);
+        replaceObjInPlace(CHILDREN_OF, {});
+        Object.keys(PARENTS).forEach(function(c){
+          PARENTS[c].forEach(function(p){ (CHILDREN_OF[p]=CHILDREN_OF[p]||[]).push(c); });
+        });
+        refreshDerivedState();
+        renderBothTrees(); renderManageSummary(); renderLedger(); renderFamilyInsights();
+        renderOnThisDay(); renderNudgeList(); renderActivityFeed(); renderArchive();
+        if (typeof renderAccessLog==="function") renderAccessLog();
+      })
+      .catch(function(err){
+        console.warn("Rootline: no backend reachable — running fully offline on the built-in demo family.", err);
+        SYNC_ENABLED = false;
+      })
+      .then(updateModeFooter);
+  }
+  // Tells the truth about what mode the app is actually running in, rather
+  // than a static disclaimer that would drift out of sync the moment a
+  // backend gets attached (or removed).
+  function updateModeFooter(){
+    var el = document.getElementById("modeFooter");
+    if (!el) return;
+    el.textContent = SYNC_ENABLED
+      ? "Connected. Every edit — by hand or by the AI — is saved for good, on every device. Recording a conversation or uploading a document really does update the archive automatically."
+      : "Running locally with no backend attached — this is the built-in demo family. Nothing here is saved; added people, photos, and recordings reset on reload. See the README to connect a real archive.";
+  }
+
   var ORDINALS = ["0th","1st","2nd","3rd","4th","5th","6th"];
   function ordinal(n){ return ORDINALS[n] || (n+"th"); }
   function isSpouse(a,b){ return TIES.some(function(pair){ return (pair[0]===a&&pair[1]===b)||(pair[0]===b&&pair[1]===a); }); }
@@ -2221,7 +2340,7 @@
     msg.textContent = message+" ";
     var undoBtn = document.createElement("button");
     undoBtn.type = "button"; undoBtn.textContent = "Undo";
-    undoBtn.style.cssText = "all:unset;text-decoration:underline;cursor:pointer;font-weight:600;color:inherit;";
+    undoBtn.className = "undo-btn";
     el.appendChild(msg); el.appendChild(undoBtn);
     document.body.appendChild(el);
     requestAnimationFrame(function(){ el.classList.add("show"); });
@@ -2397,7 +2516,7 @@
     // "view story"/"view photos" link) — a person's own Timeline tab
     // shouldn't be a stripped-down copy of the entries it's built from.
     return '<div class="ledger" style="padding-left:22px;">'+entries.map(function(e){
-      var pillHtml = "";
+      var pillHtml = aiSourceBadge(e);
       if (e.pending) pillHtml += state.merged ? '<span class="t-pill confirmed">confirmed</span>' : '<span class="t-pill pending">pending review</span>';
       if (e.link){
         var linkLabel = e.link.type==="story" ? "view story →" : "view photos →";
@@ -2414,12 +2533,21 @@
   // classifier, but it's a real filter over the same TIMELINE data rather
   // than a second hand-maintained list.
   function isStoryEntry(e){ return !!(e.desc && e.desc.length>=15); }
+  // A small, honest provenance marker — not a warning, just a note that
+  // this entry was written by the AI archivist from a recording or an
+  // uploaded document rather than typed in by hand. Nothing downstream
+  // treats it differently; it's purely informational.
+  function aiSourceBadge(e){
+    if (e.source==="ai_transcript") return '<span class="t-pill ai-source" title="Added by the AI from a recorded conversation">from a recording</span>';
+    if (e.source==="ai_document") return '<span class="t-pill ai-source" title="Added by the AI from an uploaded document">from a document</span>';
+    return "";
+  }
   function storiesFor(id){ return TIMELINE.filter(function(e){ return e.people.indexOf(id)>-1 && isStoryEntry(e); }); }
   function buildStoriesPane(id){
     var entries = storiesFor(id).slice().reverse();
     if (!entries.length) return '<div class="empty-cta"><p class="empty-note">No stories recorded for '+esc(PEOPLE[id].name.split(" ")[0])+' yet.</p><button type="button" class="ghost-btn" data-action="goto-record">Record a story →</button></div>';
     return '<div class="stories-pane">'+entries.map(function(e){
-      var pendingHtml = e.pending ? '<span class="t-pill pending">pending review</span>' : "";
+      var pendingHtml = aiSourceBadge(e) + (e.pending ? '<span class="t-pill pending">pending review</span>' : "");
       var peopleHtml = e.people.filter(function(pid){ return pid!==id && PEOPLE[pid]; }).map(function(pid){
         return '<button type="button" class="namelink" data-id="'+pid+'">'+esc(PEOPLE[pid].name)+'</button>';
       }).join("");
@@ -2670,7 +2798,7 @@
   });
   document.getElementById("shortcutsClose").addEventListener("click", closeShortcuts);
   shortcutsOverlay.addEventListener("click", function(e){ if (e.target===shortcutsOverlay) closeShortcuts(); });
-  var SHORTCUT_VIEWS = ["tree","access","record","story","timeline","archive","addperson","pathfinder"];
+  var SHORTCUT_VIEWS = ["tree","access","record","timeline","archive","addperson"];
   document.addEventListener("keydown", function(e){
     if (e.key==="Escape" && !shortcutsOverlay.hidden){ closeShortcuts(); return; }
     if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -3171,59 +3299,125 @@
   })();
 
 
-  /* ---------------- record + extract ---------------- */
-  var TRANSCRIPT = [
-    {t:"00:00",who:"jim",name:"Jim",text:"Alright, this thing's recording. So — tell me about the diner."},
-    {t:"00:07",who:"frank",name:"Frank",text:"Alden's Lunar Diner. Your great‑grandpa Walter built the counter himself, out of a bowling alley lane he bought for five bucks."},
-    {t:"00:19",who:"frank",name:"Frank",text:"I was nineteen, flipping eggs, when this girl walks in with the church choir. Dorothy Marsh. Ordered coffee, didn't drink it."},
-    {t:"00:33",who:"jim",name:"Jim",text:"This is the dance story?"},
-    {t:"00:35",who:"frank",name:"Frank",text:"No, no — dance was later. Grange Hall, fall of '59. I asked her before the band even finished tuning up."},
-    {t:"00:47",who:"frank",name:"Frank",text:"Married her three years after. Should've asked sooner."},
-    {t:"00:52",who:"jim",name:"Jim",text:"What happened to the diner?"},
-    {t:"00:54",who:"frank",name:"Frank",text:"Spring of '61, the river came up over Route 9. Three feet of water in the place. Dorothy and I bailed it out with soup pots till sunrise."}
-  ];
-  var EXTRACT_PEOPLE = [
-    {after:1,label:"Walter Alden",tag:"matched"},
-    {after:2,label:"Dorothy Alden",tag:"matched"},
-    {after:2,label:"Frank Alden",tag:"matched"}
-  ];
-  var EXTRACT_PLACES = [
-    {after:1,label:"Alden's Lunar Diner"},
-    {after:4,label:"Grange Hall"},
-    {after:7,label:"Route 9"}
-  ];
-  var EXTRACT_EVENTS = [
-    {after:4,label:"1959 — meets Dorothy at a dance",tag:"new"},
-    {after:5,label:"1962 — Frank & Dorothy marry",tag:"matched"},
-    {after:7,label:"1961 — flood damages the diner",tag:"new"}
-  ];
-
-  var recPlaying = false, recIndex = 0, recTimer = null;
+  /* ---------------- record + extract (real recording, real AI) ----------------
+     Start recording -> MediaRecorder captures audio (kept as a backup) while
+     the Web Speech API (where available) produces a live transcript on
+     screen. Stop -> the whole transcript goes to /api/process-transcript,
+     which returns a small set of proposed actions (see
+     api/lib/claude-tools.js); applyAiActions() above applies every one of
+     them immediately, the same way a human editing a form would, with no
+     separate confirm/merge step — matching how this feature is meant to
+     work: record, and the archive updates itself. */
   var waveform = document.getElementById("waveform");
-  for (var i=0;i<28;i++){ var bar=document.createElement("i"); bar.style.setProperty("--h",(10+Math.random()*24)+"px"); waveform.appendChild(bar); }
+  for (var wfi=0; wfi<28; wfi++){ var bar=document.createElement("i"); bar.style.setProperty("--h",(10+Math.random()*24)+"px"); waveform.appendChild(bar); }
+  document.getElementById("recAsName").textContent = PEOPLE[state.viewer] ? PEOPLE[state.viewer].name : state.viewer;
 
-  document.getElementById("recBtn").addEventListener("click", function(){
-    if (recPlaying) return;
-    recPlaying = true;
-    document.getElementById("recBtnLabel").textContent = "Playing…";
-    document.getElementById("recBtn").setAttribute("disabled","disabled");
-    waveform.classList.add("playing");
-    document.getElementById("transcript").innerHTML = "";
-    // Replaying re-runs the same extraction pass — clear last run's chips
-    // and merge status, or a second playthrough doubles every chip up.
-    ["chipsPeople","chipsPlaces","chipsEvents"].forEach(function(id){ document.getElementById(id).innerHTML = ""; });
-    document.getElementById("transcriptSearch").value = "";
-    document.getElementById("transcriptSearchStatus").textContent = "";
-    document.getElementById("mergeBtn").setAttribute("disabled","disabled");
-    document.getElementById("mergeStatus").textContent = "";
-    document.getElementById("mergeStatus").classList.remove("ok");
-    recIndex = 0;
-    step();
+  var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var recSupportNote = document.getElementById("recSupportNote");
+  if (!SpeechRec){
+    recSupportNote.textContent = "Live transcription isn't supported in this browser (try Chrome or Edge) — you can still record audio, or just paste a transcript below.";
+  }
+
+  var mediaRecorder = null, audioChunks = [], recognizer = null, isRecording = false;
+  var liveTranscriptParts = [], recStartTime = null, recTimerInterval = null;
+
+  function fmtRecTimer(ms){
+    var s = Math.floor(ms/1000), m = Math.floor(s/60); s = s%60;
+    return (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+  }
+
+  document.getElementById("recStartBtn").addEventListener("click", function(){
+    if (isRecording) return;
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      recSupportNote.textContent = "This browser can't access the microphone here — paste a transcript below instead.";
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+      isRecording = true;
+      audioChunks = [];
+      liveTranscriptParts = [];
+      document.getElementById("transcript").innerHTML = "";
+      document.getElementById("transcriptSearch").value = "";
+      document.getElementById("transcriptSearchStatus").textContent = "";
+      document.getElementById("recStartBtn").style.display = "none";
+      document.getElementById("recStopBtn").style.display = "";
+      waveform.classList.add("playing");
+      recStartTime = Date.now();
+      clearInterval(recTimerInterval);
+      recTimerInterval = setInterval(function(){ document.getElementById("recTimer").textContent = fmtRecTimer(Date.now()-recStartTime); }, 500);
+
+      try {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.addEventListener("dataavailable", function(e){ if (e.data && e.data.size>0) audioChunks.push(e.data); });
+        mediaRecorder.start();
+      } catch(err){ mediaRecorder = null; }
+
+      if (SpeechRec){
+        recognizer = new SpeechRec();
+        recognizer.continuous = true;
+        recognizer.interimResults = true;
+        recognizer.lang = "en-US";
+        var interimLine = null;
+        recognizer.addEventListener("result", function(e){
+          var box = document.getElementById("transcript");
+          for (var ri=e.resultIndex; ri<e.results.length; ri++){
+            var res = e.results[ri];
+            var text = res[0].transcript;
+            if (res.isFinal){
+              liveTranscriptParts.push(text.trim());
+              if (interimLine){ interimLine.remove(); interimLine = null; }
+              var row = document.createElement("div");
+              row.className = "t-line";
+              row.innerHTML = '<span class="ts">'+fmtRecTimer(Date.now()-recStartTime)+'</span><span>'+esc(text.trim())+'</span>';
+              box.appendChild(row);
+            } else {
+              if (!interimLine){ interimLine = document.createElement("div"); interimLine.className = "t-line"; interimLine.style.opacity = ".55"; box.appendChild(interimLine); }
+              interimLine.innerHTML = '<span class="ts">…</span><span>'+esc(text)+'</span>';
+            }
+            box.scrollTop = box.scrollHeight;
+          }
+        });
+        recognizer.addEventListener("error", function(e){ console.warn("Speech recognition error", e.error); });
+        // Some browsers stop the recognizer after a pause in speech even
+        // with continuous:true — restart it transparently while we're
+        // still actively recording, so a lull in conversation doesn't
+        // silently truncate the transcript.
+        recognizer.addEventListener("end", function(){ if (isRecording){ try { recognizer.start(); } catch(err){} } });
+        try { recognizer.start(); } catch(err){}
+      }
+    }).catch(function(err){
+      recSupportNote.textContent = "Couldn't access the microphone (" + (err && err.message ? err.message : "permission denied") + "). You can still paste a transcript below.";
+    });
+  });
+
+  document.getElementById("recStopBtn").addEventListener("click", function(){
+    if (!isRecording) return;
+    isRecording = false;
+    clearInterval(recTimerInterval);
+    waveform.classList.remove("playing");
+    document.getElementById("recStopBtn").style.display = "none";
+    document.getElementById("recStartBtn").style.display = "";
+    document.getElementById("recStartLabel").textContent = "Start a new recording";
+    if (recognizer){ try { recognizer.stop(); } catch(err){} recognizer = null; }
+    var finishStop = function(audioBlob){ processTranscript(liveTranscriptParts.join(" "), audioBlob); };
+    if (mediaRecorder && mediaRecorder.state !== "inactive"){
+      mediaRecorder.addEventListener("stop", function(){
+        finishStop(audioChunks.length ? new Blob(audioChunks, {type:"audio/webm"}) : null);
+      }, {once:true});
+      mediaRecorder.stop();
+      mediaRecorder.stream.getTracks().forEach(function(t){ t.stop(); });
+    } else {
+      finishStop(null);
+    }
+  });
+
+  document.getElementById("processPastedBtn").addEventListener("click", function(){
+    processTranscript("", null);
   });
 
   // Dims non-matching lines rather than trying to splice a <mark> into text
-  // that also has to keep its speaker <span> intact — cheaper, and just as
-  // effective at making the lines you're after pop out of a scroll.
+  // — cheaper, and just as effective at making the lines you're after pop
+  // out of a scroll.
   document.getElementById("transcriptSearch").addEventListener("input", function(){
     var q = this.value.trim().toLowerCase();
     var lines = Array.from(document.querySelectorAll("#transcript .t-line"));
@@ -3239,54 +3433,88 @@
       l.classList.toggle("dim-line", !match);
       if (match){ matchCount++; if (!firstMatch) firstMatch = l; }
     });
-    status.textContent = lines.length ? (matchCount+" of "+lines.length+" line"+(lines.length===1?"":"s")+" match") : "Nothing to search yet — play the recording first.";
+    status.textContent = lines.length ? (matchCount+" of "+lines.length+" line"+(lines.length===1?"":"s")+" match") : "Nothing to search yet — start or paste a transcript first.";
     if (firstMatch) firstMatch.scrollIntoView({block:"center", behavior:"smooth"});
   });
-  function step(){
-    if (recIndex >= TRANSCRIPT.length){
-      recPlaying = false;
-      waveform.classList.remove("playing");
-      document.getElementById("recBtnLabel").textContent = "Play again";
-      document.getElementById("recBtn").removeAttribute("disabled");
-      document.getElementById("mergeBtn").removeAttribute("disabled");
+
+  function processTranscript(liveText, audioBlob){
+    var pastedBox = document.getElementById("pastedTranscript");
+    var fullTranscript = (liveText||"").trim();
+    if (pastedBox && pastedBox.value.trim()) fullTranscript = (fullTranscript ? fullTranscript+"\n" : "") + pastedBox.value.trim();
+    var status = document.getElementById("mergeStatus");
+    var idleNote = document.getElementById("aiIdleNote");
+    var logEl = document.getElementById("aiActionLog");
+    status.classList.remove("ok");
+    if (!fullTranscript){
+      status.textContent = "Nothing was recorded or typed — nothing to send to the AI.";
       return;
     }
-    var line = TRANSCRIPT[recIndex];
-    var row = document.createElement("div");
-    row.className = "t-line";
-    row.innerHTML = '<span class="ts">'+line.t+'</span><span><span class="who '+line.who+'">'+line.name+':</span> '+line.text+'</span>';
-    var box = document.getElementById("transcript");
-    box.appendChild(row);
-    box.scrollTop = box.scrollHeight;
-
-    EXTRACT_PEOPLE.filter(function(x){return x.after===recIndex;}).forEach(function(x){ addChip("chipsPeople", x); });
-    EXTRACT_PLACES.filter(function(x){return x.after===recIndex;}).forEach(function(x){ addChip("chipsPlaces", x); });
-    EXTRACT_EVENTS.filter(function(x){return x.after===recIndex;}).forEach(function(x){ addChip("chipsEvents", x); });
-
-    recIndex++;
-    recTimer = setTimeout(step, 900);
-  }
-
-  function addChip(containerId, item){
-    var el = document.createElement("span");
-    el.className = "chip" + (item.tag==="new" ? " new" : "");
-    el.textContent = item.label;
-    document.getElementById(containerId).appendChild(el);
-  }
-
-  document.getElementById("mergeBtn").addEventListener("click", function(){
-    var btn = this;
-    btn.setAttribute("disabled","disabled");
-    var status = document.getElementById("mergeStatus");
-    status.textContent = "Merging into the archive…";
-    setTimeout(function(){
-      status.textContent = "Merged — 2 new timeline entries confirmed, linked to Frank & Dorothy's story.";
+    if (!SYNC_ENABLED){
+      status.textContent = "No backend is connected, so the AI can't process this right now — the transcript above is still there if you want to add things by hand.";
+      return;
+    }
+    idleNote.hidden = true;
+    logEl.hidden = false;
+    logEl.innerHTML = '<p class="empty-note">Reading the conversation and checking it against the archive…</p>';
+    status.textContent = "";
+    var storyIds = TIMELINE.filter(function(e){ return e.id && isStoryEntry(e); })
+      .map(function(e){ return {id:e.id, title:e.title, date:e.date}; });
+    var appliedActions = [];
+    fetch("api/process-transcript", {
+      method:"POST", headers:apiHeaders(),
+      body: JSON.stringify({
+        transcript: fullTranscript,
+        people: PEOPLE,
+        stories: storyIds,
+        recorderId: state.viewer,
+        recorderName: PEOPLE[state.viewer] ? PEOPLE[state.viewer].name : state.viewer
+      })
+    }).then(function(r){
+      if (r.status===401){
+        if (promptForPassphrase(true)) return processTranscript(liveText, audioBlob);
+        throw new Error("A passphrase is required to use the AI.");
+      }
+      if (!r.ok) return r.json().catch(function(){ return null; }).then(function(body){ throw new Error((body&&body.message)||("AI processing failed ("+r.status+")")); });
+      return r.json();
+    }).then(function(result){
+      if (!result) return; // 401 path above already handled its own retry
+      appliedActions = applyAiActions(result.actions||[]);
+      logEl.innerHTML = appliedActions.length
+        ? '<ul class="ai-applied-list">'+appliedActions.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join("")+'</ul>'
+        : '<p class="empty-note">The AI read the conversation but didn\'t find anything new to add — maybe it was already all on record.</p>';
+      status.textContent = appliedActions.length ? "Archive updated — "+appliedActions.length+" change"+(appliedActions.length===1?"":"s")+" applied automatically." : "Processed — nothing new to add.";
       status.classList.add("ok");
-      document.getElementById("tl-badge").style.display = "inline-block";
-      state.merged = true;
-      renderLedger(); renderFamilyInsights(); renderOnThisDay(); renderNudgeList(); renderActivityFeed();
-    }, 900);
-  });
+      renderBothTrees(); renderManageSummary(); renderLedger(); renderFamilyInsights(); renderOnThisDay(); renderNudgeList(); renderActivityFeed();
+    }).catch(function(err){
+      console.error(err);
+      logEl.innerHTML = '<p class="empty-note">Something went wrong talking to the AI: '+esc((err&&err.message)||String(err))+'</p>';
+    }).then(function(){
+      if (!SYNC_ENABLED) return;
+      // Log the recording for a durable audit trail — what was said, and
+      // what the AI actually did about it — independent of whether there's
+      // audio to attach (a pasted transcript has none).
+      function logRecording(blobUrl){
+        fetch("api/recordings", {
+          method:"POST", headers:apiHeaders(),
+          body: JSON.stringify({ blobUrl:blobUrl||null, transcript:fullTranscript, actionsApplied:appliedActions })
+        }).catch(function(){});
+      }
+      if (audioBlob){
+        var reader = new FileReader();
+        reader.onload = function(){
+          fetch("api/upload", {
+            method:"POST", headers:apiHeaders(),
+            body: JSON.stringify({ filename:"recording-"+Date.now()+".webm", contentType:"audio/webm", dataBase64:reader.result, kind:"recording" })
+          }).then(function(r){ return r.ok ? r.json() : null; })
+            .then(function(result){ logRecording(result && result.url); })
+            .catch(function(){ logRecording(null); });
+        };
+        reader.readAsDataURL(audioBlob);
+      } else {
+        logRecording(null);
+      }
+    });
+  }
 
   /* ---------------- timeline ---------------- */
   // Birth/wedding YEARS live on PEOPLE/TIMELINE already; month-and-day is
@@ -3339,8 +3567,8 @@
     {date:"1940",title:"Dorothy Marsh born",desc:"Springfield.",people:["dorothy"],tags:["birth"]},
     {date:"1943",title:"Linda Voss born",desc:"",people:["linda"],tags:["birth"]},
     {date:"1959",title:"Diane Alden born",desc:"From an earlier relationship of Frank's.",people:["diane","frank"],tags:["birth"]},
-    {date:"1959",title:"Frank meets Dorothy at the Grange Hall dance",desc:"From Jim's Aug 2026 recording with Frank.",people:["frank","dorothy","jim"],pending:true,link:{type:"story"},tags:["courtship"]},
-    {date:"1961",title:"Spring flood damages Alden's Lunar Diner",desc:"From Jim's Aug 2026 recording with Frank.",people:["frank","dorothy","walter"],pending:true,tags:["hardship"]},
+    {date:"1959",title:"Frank meets Dorothy at the Grange Hall dance",desc:"From Jim's Aug 2026 recording with Frank.",people:["frank","dorothy","jim"],id:"seed-dance",link:{type:"story"},tags:["courtship"]},
+    {date:"1961",title:"Spring flood damages Alden's Lunar Diner",desc:"From Jim's Aug 2026 recording with Frank.",people:["frank","dorothy","walter"],id:"seed-flood",tags:["hardship"]},
     {date:"1962",title:"Frank & Dorothy marry",desc:"Springfield.",people:["frank","dorothy"],link:{type:"archive",match:"Frank & Dorothy's wedding"},tags:["marriage"]},
     {date:"1965",title:"Jim Alden born",desc:"",people:["jim"],tags:["birth"]},
     {date:"1966",title:"Robert & Linda Nash marry",desc:"",people:["robert","linda"],tags:["marriage"]},
@@ -3391,7 +3619,7 @@
       var inScope = entry.people.some(function(p){ return scope.indexOf(p)>-1 && !dimForViewer(state.viewer,p); });
       var row = document.createElement("div");
       row.className = "t-entry" + (inScope ? "" : " dim");
-      var pillHtml = "";
+      var pillHtml = aiSourceBadge(entry);
       if (entry.pending){
         pillHtml += state.merged ? '<span class="t-pill confirmed">confirmed</span>' : '<span class="t-pill pending">pending review</span>';
       }
@@ -3626,7 +3854,7 @@
         '<textarea placeholder="Tell us the story behind it — what\'s happening, why it matters" id="upStory" rows="3"></textarea>'+
         '<div style="display:flex;gap:8px;">'+
           '<button class="rec-btn" id="upSave">Save</button>'+
-          '<button class="rec-btn" id="upCancel" style="background:transparent;color:var(--text-muted);border:1px solid var(--border);">Cancel</button>'+
+          '<button class="ghost-btn" id="upCancel" style="padding:9px 16px;">Cancel</button>'+
         '</div>'+
         '<div class="merge-status" id="upStatus" aria-live="polite"></div>'+
       '</div>';
@@ -3660,34 +3888,110 @@
       };
       reader.readAsDataURL(file);
     });
+    var uploadedFileName = null, uploadedContentType = null;
+    fileInput.addEventListener("change", function(){ var f = fileInput.files[0]; if (f){ uploadedFileName = f.name; uploadedContentType = f.type; } });
     wrap.querySelector("#upSave").addEventListener("click", function(){
       var cap = wrap.querySelector("#upCaption").value.trim() || "Untitled upload";
       var whoRaw = wrap.querySelector("#upWho").value.trim();
       var when = wrap.querySelector("#upWhen").value.trim();
+      var storyText = wrap.querySelector("#upStory").value.trim();
       var saveBtn = wrap.querySelector("#upSave");
       saveBtn.setAttribute("disabled","disabled");
       status.classList.remove("ok");
       status.textContent = "Reading the description and linking it to matching people…";
-      setTimeout(function(){
-        // Match each typed name against the real cast — a hit links the
-        // photo to that person's actual profile; a miss is kept as free
-        // text rather than silently dropped, since "who's in it" was the
-        // one thing this form explicitly promised to use.
-        var typed = whoRaw ? whoRaw.split(",").map(function(s){return s.trim();}).filter(function(s){return s;}) : [];
-        var tags = typed.map(function(t){
-          var hit = Object.keys(PEOPLE).filter(function(id){ return PEOPLE[id].name.toLowerCase()===t.toLowerCase(); })[0];
-          return hit ? {id:hit} : {text:t};
-        });
+      // Match each typed name against the real cast — a hit links the photo
+      // to that person's actual profile; a miss is kept as free text rather
+      // than silently dropped, since "who's in it" was the one thing this
+      // form explicitly promised to use.
+      var typed = whoRaw ? whoRaw.split(",").map(function(s){return s.trim();}).filter(function(s){return s;}) : [];
+      var tags = typed.map(function(t){
+        var hit = Object.keys(PEOPLE).filter(function(id){ return PEOPLE[id].name.toLowerCase()===t.toLowerCase(); })[0];
+        return hit ? {id:hit} : {text:t};
+      });
+      // Runs after the photo/story itself is already saved and visible —
+      // reads the actual file (PDF or plain text; not casual photos, where
+      // there's rarely anything to extract beyond what the caption already
+      // says) and lets the AI catalog anything it clearly supports, the
+      // same way a recorded conversation would. Deliberately holds off the
+      // renderArchive() reset until this settles, since that call rebuilds
+      // #upStatus's whole parent element — updating it after that point
+      // would write into a detached node no one can see.
+      function maybeProcessDocumentWithAI(fileUrl){
+        var isPdf = uploadedContentType === "application/pdf";
+        var isText = uploadedContentType === "text/plain" || /\.txt$/i.test(uploadedFileName||"");
+        if (!SYNC_ENABLED || !fileUrl || (!isPdf && !isText)){
+          setTimeout(renderArchive, 700);
+          return;
+        }
+        status.textContent += " Reading the file itself for anything else worth cataloging…";
+        var storyIds = TIMELINE.filter(function(e){ return e.id && isStoryEntry(e); })
+          .map(function(e){ return {id:e.id, title:e.title, date:e.date}; });
+        var request = isText
+          ? fetch("api/process-transcript", {
+              method:"POST", headers:apiHeaders(),
+              body: JSON.stringify({ transcript:decodeBase64DataUrl(uploadedDataUrl), people:PEOPLE, stories:storyIds, recorderId:state.viewer, recorderName: PEOPLE[state.viewer]?PEOPLE[state.viewer].name:state.viewer })
+            })
+          : fetch("api/process-document", {
+              method:"POST", headers:apiHeaders(),
+              body: JSON.stringify({ dataBase64:uploadedDataUrl, contentType:uploadedContentType, caption:cap, meta:when, people:PEOPLE, stories:storyIds })
+            });
+        request.then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(result){
+            var applied = result && result.actions ? applyAiActions(result.actions, "ai_document") : [];
+            if (applied.length){
+              status.textContent += " Also found: "+applied.join(" ");
+              renderBothTrees(); renderManageSummary(); renderLedger(); renderFamilyInsights(); renderOnThisDay(); renderNudgeList(); renderActivityFeed();
+            } else {
+              status.textContent += " Nothing else to catalog from the file itself.";
+            }
+          })
+          .catch(function(){ status.textContent += " (Couldn't read the file with AI just now — the upload itself is still saved.)"; })
+          .then(function(){ renderArchive(); });
+      }
+      function finishSave(fileUrl){
         var entry = { glyph: uploadedIsImage ? "\u{1F5BC}\u{FE0F}" : "\u{1F4C4}", cap:cap, meta:(when?when+" · ":"")+"Just added", tags:tags };
-        if (uploadedDataUrl){ entry.dataUrl = uploadedDataUrl; entry.isImage = uploadedIsImage; }
+        if (fileUrl){ entry.dataUrl = fileUrl; entry.isImage = uploadedIsImage; }
         PHOTOS.push(entry);
-        status.textContent = tags.length ? "Saved and tagged to "+tags.map(tagLabel).join(", ")+"." : "Saved — no one tagged yet, so it won't show on a profile.";
+        var linkedIds = tags.filter(function(t){ return t.id; }).map(function(t){ return t.id; });
+        var savedMsg = tags.length ? "Saved and tagged to "+tags.map(tagLabel).join(", ")+"." : "Saved — no one tagged yet, so it won't show on a profile.";
+        if (storyText && linkedIds.length){
+          TIMELINE.push({ id:makeTimelineId(), date:when||"", title:cap, desc:storyText, people:linkedIds.slice(), tags:["upload"], source:"manual" });
+          savedMsg += " The story you wrote is now on the timeline too.";
+          renderLedger(); renderFamilyInsights(); renderOnThisDay(); renderNudgeList(); renderActivityFeed();
+        } else if (storyText){
+          savedMsg += " (The story text needs at least one matched person to appear on the timeline — it wasn't saved separately.)";
+        }
+        status.textContent = savedMsg;
         status.classList.add("ok");
         saveBtn.removeAttribute("disabled");
-        setTimeout(renderArchive, 700);
-      }, 900);
+        scheduleSave();
+        maybeProcessDocumentWithAI(fileUrl);
+      }
+      if (uploadedDataUrl && SYNC_ENABLED){
+        // Persist the actual file to durable storage instead of only
+        // keeping the base64 copy in memory, so it survives a reload / is
+        // visible from any device once a backend is attached.
+        fetch("api/upload", {
+          method:"POST", headers:apiHeaders(),
+          body: JSON.stringify({ filename:uploadedFileName||"upload", contentType:uploadedContentType||"", dataBase64:uploadedDataUrl, kind:"photo" })
+        }).then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(result){ finishSave(result && result.url ? result.url : uploadedDataUrl); })
+          .catch(function(){ finishSave(uploadedDataUrl); });
+      } else {
+        finishSave(uploadedDataUrl);
+      }
     });
   }
+  function decodeBase64DataUrl(dataUrl){
+    var b64 = dataUrl.indexOf(",")>-1 ? dataUrl.slice(dataUrl.indexOf(",")+1) : dataUrl;
+    try {
+      var binary = window.atob(b64);
+      var bytes = new Uint8Array(binary.length);
+      for (var i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+      return new TextDecoder("utf-8").decode(bytes);
+    } catch(err){ try { return window.atob(b64); } catch(err2){ return ""; } }
+  }
+  function makeTimelineId(){ return "e"+Math.random().toString(36).slice(2,10)+Date.now().toString(36); }
 
   function renderBothTrees(){
     var layout = computeLayout(state.viewer);
@@ -3748,6 +4052,7 @@
       });
     });
     branchColorMapCache = {};
+    scheduleSave(); // persists PEOPLE/PARENTS/TIES/etc. — every mutation function below calls refreshDerivedState() when it's done
   }
   function personHasChildren(id){ return (CHILDREN_OF[id]||[]).length>0; }
   // The inverse of addPerson — scrubs every structure a person could be
@@ -3929,6 +4234,86 @@
     renderBothTrees();
     renderManageSummary();
     renderLedger(); renderFamilyInsights(); renderOnThisDay(); renderNudgeList(); renderActivityFeed();
+  }
+  // Applies the fixed action vocabulary the AI is allowed to propose (see
+  // api/lib/claude-tools.js — the two lists are kept in lockstep by hand)
+  // by routing each action through the exact same functions a human-driven
+  // form submit uses, so a recording can never leave the graph in a state a
+  // person couldn't have reached by hand. Returns a list of plain-English
+  // descriptions of what actually happened, for the on-screen log.
+  function applyAiActions(actions, source){
+    source = source || "ai_transcript";
+    var tempMap = {}; // AI-invented temp_id -> real person id
+    function resolveId(id){ return tempMap[id] || id; }
+    var applied = [];
+    (actions||[]).forEach(function(action){
+      try {
+        var input = action.input || {};
+        if (action.type==="create_person"){
+          if (!input.name || !input.temp_id) return;
+          var relation = input.relation==="spouse" ? "spouse" : "child";
+          var parents = [];
+          if (relation==="spouse"){
+            var spouseId = resolveId(input.spouse_id);
+            if (!spouseId || !PEOPLE[spouseId]) return; // can't marry someone who doesn't resolve to a real person
+            if (spouseOf(spouseId)) return; // already has a spouse on record — skip rather than create a conflicting tie
+            parents = [spouseId];
+          } else {
+            parents = (input.parent_ids||[]).map(resolveId).filter(function(pid){ return PEOPLE[pid]; });
+          }
+          var newId = makePersonId(input.name);
+          tempMap[input.temp_id] = newId;
+          addPerson({ id:newId, name:input.name, years:input.years||"", gender:input.gender||"", relation:relation, parents:parents });
+          var addSuffix;
+          if (relation==="spouse" && parents[0]) addSuffix = " as "+PEOPLE[parents[0]].name+"'s spouse";
+          else if (parents.length) addSuffix = " as "+(parents.length>1 ? "their" : PEOPLE[parents[0]].name+"'s")+" child";
+          else addSuffix = " to the archive";
+          applied.push("Added "+input.name+addSuffix+".");
+        } else if (action.type==="edit_person"){
+          var pid1 = resolveId(input.person_id);
+          if (!pid1 || !PEOPLE[pid1]) return;
+          var mergedName = input.name || PEOPLE[pid1].name;
+          var mergedYears = input.years!==undefined ? input.years : PEOPLE[pid1].years;
+          var mergedGender = input.gender || GENDER[pid1];
+          var changed = mergedName!==PEOPLE[pid1].name || mergedYears!==PEOPLE[pid1].years || mergedGender!==GENDER[pid1];
+          if (!changed) return;
+          editPersonFields(pid1, mergedName, mergedYears, mergedGender);
+          applied.push("Updated "+mergedName+"'s details from the recording.");
+        } else if (action.type==="add_relationship"){
+          var pA = resolveId(input.person_id), pB = resolveId(input.related_person_id);
+          if (!pA || !pB || !PEOPLE[pA] || !PEOPLE[pB] || pA===pB) return;
+          if (input.type==="spouse"){
+            if (isSpouse(pA,pB) || spouseOf(pA) || spouseOf(pB)) return;
+            TIES.push([pA, pB]);
+            refreshDerivedState();
+            applied.push("Linked "+PEOPLE[pA].name+" and "+PEOPLE[pB].name+" as spouses.");
+          } else if (input.type==="parent"){
+            PARENTS[pA] = PARENTS[pA] || [];
+            if (PARENTS[pA].indexOf(pB)>-1) return;
+            if (PARENTS[pA].length>=2) return; // never silently displaces an existing recorded parent
+            PARENTS[pA].push(pB);
+            (CHILDREN_OF[pB]=CHILDREN_OF[pB]||[]).push(pA);
+            refreshDerivedState();
+            applied.push("Recorded "+PEOPLE[pB].name+" as "+PEOPLE[pA].name+"'s parent.");
+          }
+        } else if (action.type==="add_story"){
+          if (!input.title || !input.desc) return;
+          var peopleIds = (input.people_ids||[]).map(resolveId).filter(function(pid){ return PEOPLE[pid]; });
+          TIMELINE.push({ id:makeTimelineId(), date:input.date||"", title:input.title, desc:input.desc, people:peopleIds, tags:input.tags||[], source:source });
+          applied.push('Added a story to the timeline: "'+input.title+'"'+(peopleIds.length?" ("+peopleIds.map(function(pid){return PEOPLE[pid].name;}).join(", ")+")":"")+".");
+          scheduleSave();
+        } else if (action.type==="edit_story"){
+          var story = TIMELINE.filter(function(e){ return e.id===input.story_id; })[0];
+          if (!story) return;
+          if (input.date!==undefined) story.date = input.date;
+          if (input.title!==undefined) story.title = input.title;
+          if (input.desc!==undefined) story.desc = input.desc;
+          applied.push('Updated the story "'+story.title+'" with new detail.');
+          scheduleSave();
+        }
+      } catch(err){ console.error("Could not apply AI action", action, err); }
+    });
+    return applied;
   }
   function personOptionLabel(id){ return PEOPLE[id].name+(PEOPLE[id].years?" ("+PEOPLE[id].years+")":""); }
   // A picker with 20+ names in strict A-Z order makes you hunt for whoever
@@ -4228,6 +4613,7 @@
   renderManageSummary();
   renderLedger(); renderFamilyInsights(); renderOnThisDay(); renderNudgeList(); renderActivityFeed();
   renderArchive();
+  hydrateFromServer(); // swaps the seed family above for the real persisted archive, if a backend is attached — see "server sync" near the top of this script
 })();
 </script>
 </body>

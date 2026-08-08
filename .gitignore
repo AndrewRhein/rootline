@@ -1,3 +1,9 @@
 .claude/
 .DS_Store
 Thumbs.db
+
+# Vercel / Node
+.vercel/
+node_modules/
+.env.local
+.env*.local
